@@ -31,6 +31,14 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   dbt_transformation:
-    # Config indicated by + and applies to all files under models/example/
-    example:
-      +materialized: view
+    staging:
+      +schema: staging
+      +materialized: view    # lightweight transformations
+
+    intermediate:
+      +schema: intermediate
+      +materialized: table   # intermediate layer
+
+    marts:
+      +schema: marts
+      +materialized: table   # BI ready layer
