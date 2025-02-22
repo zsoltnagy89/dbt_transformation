@@ -1,0 +1,6 @@
+# Ignore python venv
+dbt_sf_venv/
+# Ignore dbt compiled files and logs
+target/
+dbt_packages/
+logs/
