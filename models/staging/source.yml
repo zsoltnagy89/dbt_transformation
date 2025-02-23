@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: raw_marketing_airbyte  # Logical name for the source
+    database: MARKETING          # Snowflake database name
+    schema: RAW_MARKETING_AIRBYTE # Snowflake schema name
+    tables:
+      - name: DATASET            # Snowflake table name
+        description: "Raw data from the Airbyte pipeline for marketing."
