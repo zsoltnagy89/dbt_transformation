@@ -16,3 +16,11 @@ models:
         tests:
           - unique
           - not_null
+
+  - name: int_links
+    description: "Intermediate deduplicated table to links"
+    columns:
+      - name: s_link_id
+        tests:
+          - unique
+          - not_null
