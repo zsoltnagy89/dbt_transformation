@@ -1,17 +1,14 @@
 -- in the fututre the input will be bigger
--- incremental materialization due to scalability
--- I use a composite unique_key because the duplicated rows
--- contact_id, message_id and event_time are available almost everywhere
--- except 1 row but that is filtered out due to lack of event_time
+-- incremental materialization should be better due to scalability
+-- I need a unique id to every row in Google sheet
 {{
     config(
-        materialized='incremental',
-        unique_key=['contact_id', 'message_id', 'event_time'],
-        incremental_strategy='merge'
+        materialized='table'
     )
 }}
 
 SELECT
+    TRY_TO_TIMESTAMP(LEFT(_airbyte_extracted_at, 19), 'YYYY-MM-DD HH24:MI:SS') as ingestion_time,
     TRY_CAST(contact_id AS INTEGER) AS contact_id,
     country_or_region,
     TRY_TO_DATE(date_of_first_registration, 'YYYY-MM-DD') AS date_of_first_registration,
@@ -43,11 +40,3 @@ SELECT
     link_category_name,
     link_name
 FROM {{ source('raw_marketing_airbyte', 'DATASET') }}
--- just keep valid timestamps
-WHERE event_time IS NOT NULL AND TRY_TO_TIMESTAMP(REPLACE(event_time, ' UTC', ''), 'YYYY-MM-DD HH24:MI:SS') IS NOT NULL
-
--- jinja to handle incremental load
-{% if is_incremental() %}
--- Only process new rows based on event_time
-AND TRY_TO_TIMESTAMP(REPLACE(event_time, ' UTC', ''), 'YYYY-MM-DD HH24:MI:SS') > (SELECT MAX(event_time) FROM {{ this }})
-{% endif %}
