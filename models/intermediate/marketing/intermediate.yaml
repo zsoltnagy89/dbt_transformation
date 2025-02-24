@@ -24,3 +24,11 @@ models:
         tests:
           - unique
           - not_null
+
+  - name: fact_unsubscribe
+    description: "Intermediate deduplicated fact tables related to unsubscribe events"
+    columns:
+      - name: contact_id
+        tests:
+          - unique
+          - not_null
