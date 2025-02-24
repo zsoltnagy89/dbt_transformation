@@ -1,14 +1,13 @@
 -- in the fututre the input will be bigger
 -- incremental materialization should be better due to scalability
 -- I need a unique id to every row in Google sheet
-{{
-    config(
-        materialized='table'
-    )
-}}
+{{ config(
+    materialized='incremental',
+    unique_key='sk_id'
+) }}
 
 SELECT
-    TRY_TO_TIMESTAMP(LEFT(_airbyte_extracted_at, 19), 'YYYY-MM-DD HH24:MI:SS') as ingestion_time,
+    {{ dbt_utils.surrogate_key(['contact_id', 'order_id', 'campaign_id', 'message_id', 'section_id', 'relative_link_id']) }} as sk_id,
     TRY_CAST(contact_id AS INTEGER) AS contact_id,
     country_or_region,
     TRY_TO_DATE(date_of_first_registration, 'YYYY-MM-DD') AS date_of_first_registration,
@@ -38,5 +37,18 @@ SELECT
     TRY_CAST(relative_link_id AS INTEGER) AS relative_link_id,
     link_url,
     link_category_name,
-    link_name
+    link_name,
+    TRY_TO_TIMESTAMP(LEFT(_airbyte_extracted_at, 19), 'YYYY-MM-DD HH24:MI:SS') as ingestion_time
 FROM {{ source('raw_marketing_airbyte', 'DATASET') }}
+
+-- jinja to handle incremental load
+{% if is_incremental() %}
+-- Only process new rows based on event_time
+WHERE TRY_TO_TIMESTAMP(REPLACE(event_time, ' UTC', ''), 'YYYY-MM-DD HH24:MI:SS') > (SELECT MAX(event_time) FROM {{ this }})
+{% endif %}
+
+-- there are some edge cases whene the sk_id is not unique
+-- It could be messages, which were updated by the user
+-- I just keep the latest event from the first load
+-- in the future the merge incremental strategy (insert?update) should be able to solve it
+QUALIFY ROW_NUMBER() OVER (PARTITION BY sk_id ORDER BY event_time DESC) = 1
