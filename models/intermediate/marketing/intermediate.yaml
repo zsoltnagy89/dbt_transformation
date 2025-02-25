@@ -32,6 +32,11 @@ models:
         tests:
           - unique
           - not_null
+      - name: contact_id
+        tests:
+          - relationships:
+              to: ref('int_contacts')
+              field: contact_id
 
   - name: int_interactions
     description: "Intermediate fact table related to interaction events"
@@ -40,3 +45,8 @@ models:
         tests:
           - unique
           - not_null
+      - name: contact_id
+        tests:
+          - relationships:
+              to: ref('int_contacts')
+              field: contact_id

@@ -23,7 +23,7 @@ WITH contacts AS (
 )
 
 SELECT
-    contact_id,     -- unique key
+    contact_id,     -- PK
     country_or_region,
     date_of_first_registration,
     date_of_last_unsubscription,
