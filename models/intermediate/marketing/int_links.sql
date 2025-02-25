@@ -15,5 +15,8 @@ WITH combination AS (
 
 SELECT
     {{ dbt_utils.surrogate_key(['link_url', 'relative_link_id']) }} AS s_link_id,
-    *
+    link_url,
+    relative_link_id,
+    link_name,
+    link_category_name
 FROM combination

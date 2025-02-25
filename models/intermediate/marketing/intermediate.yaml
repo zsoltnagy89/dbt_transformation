@@ -25,10 +25,18 @@ models:
           - unique
           - not_null
 
-  - name: fact_unsubscribe
-    description: "Intermediate deduplicated fact tables related to unsubscribe events"
+  - name: int_unsubscribe
+    description: "Intermediate fact table related to unsubscribe events"
     columns:
       - name: contact_id
+        tests:
+          - unique
+          - not_null
+
+  - name: int_interactions
+    description: "Intermediate fact table related to interaction events"
+    columns:
+      - name: s_message_id
         tests:
           - unique
           - not_null
