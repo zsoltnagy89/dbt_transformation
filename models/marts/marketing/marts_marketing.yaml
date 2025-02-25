@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: dim_contacts
+    description: "Marts table to contacts"
+    columns:
+      - name: contact_id
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_campaigns
+    description: "Marts table to campaigns"
+    columns:
+      - name: s_campaign_id
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_links
+    description: "Marts table to links"
+    columns:
+      - name: s_link_id
+        tests:
+          - unique
+          - not_null
+
+  - name: fact_unsubscribe
+    description: "Marts fact table related to unsubscribe events"
+    columns:
+      - name: contact_id
+        tests:
+          - unique
+          - not_null
+      - name: contact_id
+        tests:
+          - relationships:
+              to: ref('dim_contacts')
+              field: contact_id
+
+  - name: fact_interactions
+    description: "Marts fact table related to interaction events"
+    columns:
+      - name: s_message_id
+        tests:
+          - unique
+          - not_null
+      - name: contact_id
+        tests:
+          - relationships:
+              to: ref('dim_contacts')
+              field: contact_id

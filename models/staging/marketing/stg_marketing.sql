@@ -48,7 +48,6 @@ WHERE TRY_TO_TIMESTAMP(REPLACE(event_time, ' UTC', ''), 'YYYY-MM-DD HH24:MI:SS')
 {% endif %}
 
 -- there are some edge cases whene the sk_id is not unique
--- It could be messages, which were updated by the user
+-- It could be a secondary message sending?
 -- I just keep the latest event from the first load
--- in the future the merge incremental strategy (insert?update) should be able to solve it
 QUALIFY ROW_NUMBER() OVER (PARTITION BY sk_id ORDER BY event_time DESC) = 1

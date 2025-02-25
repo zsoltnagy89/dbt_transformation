@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: int_contacts
+    description: "Intermediate deduplicated table to contacts"
+    columns:
+      - name: contact_id
+        tests:
+          - unique
+          - not_null
+
+  - name: int_campaigns
+    description: "Intermediate deduplicated table to campaigns"
+    columns:
+      - name: s_campaign_id
+        tests:
+          - unique
+          - not_null
+
+  - name: int_links
+    description: "Intermediate deduplicated table to links"
+    columns:
+      - name: s_link_id
+        tests:
+          - unique
+          - not_null
+
+  - name: int_unsubscribe
+    description: "Intermediate fact table related to unsubscribe events"
+    columns:
+      - name: contact_id
+        tests:
+          - unique
+          - not_null
+      - name: contact_id
+        tests:
+          - relationships:
+              to: ref('int_contacts')
+              field: contact_id
+
+  - name: int_interactions
+    description: "Intermediate fact table related to interaction events"
+    columns:
+      - name: s_message_id
+        tests:
+          - unique
+          - not_null
+      - name: contact_id
+        tests:
+          - relationships:
+              to: ref('int_contacts')
+              field: contact_id
