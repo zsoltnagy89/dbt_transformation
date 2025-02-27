@@ -3,6 +3,7 @@ version: 2
 models:
   - name: int_contacts
     description: "Intermediate deduplicated table to contacts"
+    tags: ['intermediate']
     columns:
       - name: contact_id
         tests:
@@ -11,6 +12,7 @@ models:
 
   - name: int_campaigns
     description: "Intermediate deduplicated table to campaigns"
+    tags: ['intermediate']
     columns:
       - name: s_campaign_id
         tests:
@@ -19,6 +21,7 @@ models:
 
   - name: int_links
     description: "Intermediate deduplicated table to links"
+    tags: ['intermediate']
     columns:
       - name: s_link_id
         tests:
@@ -27,6 +30,7 @@ models:
 
   - name: int_unsubscribe
     description: "Intermediate fact table related to unsubscribe events"
+    tags: ['intermediate']
     columns:
       - name: contact_id
         tests:
@@ -40,6 +44,7 @@ models:
 
   - name: int_interactions
     description: "Intermediate fact table related to interaction events"
+    tags: ['intermediate']
     columns:
       - name: s_message_id
         tests:

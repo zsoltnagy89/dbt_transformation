@@ -14,7 +14,7 @@ WITH contacts AS (
         COALESCE(location, 'Unknown') AS location,
         signup_source,
         signup_source_v2,
-        ROW_NUMBER() OVER (PARTITION BY contact_id ORDER BY date_of_first_registration DESC) AS row_num
+        ROW_NUMBER() OVER (PARTITION BY contact_id ORDER BY date_of_first_registration ASC) AS row_num
     FROM {{ ref('stg_marketing') }}
 
     {% if is_incremental() %}
@@ -33,4 +33,5 @@ SELECT
     signup_source,
     signup_source_v2,
 FROM contacts
+-- keep the first regtistration date
 WHERE row_num = 1

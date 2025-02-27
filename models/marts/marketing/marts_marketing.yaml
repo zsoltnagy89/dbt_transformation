@@ -3,6 +3,7 @@ version: 2
 models:
   - name: dim_contacts
     description: "Marts table to contacts"
+    tags: ['marts']
     columns:
       - name: contact_id
         tests:
@@ -11,6 +12,7 @@ models:
 
   - name: dim_campaigns
     description: "Marts table to campaigns"
+    tags: ['marts']
     columns:
       - name: s_campaign_id
         tests:
@@ -19,6 +21,7 @@ models:
 
   - name: dim_links
     description: "Marts table to links"
+    tags: ['marts']
     columns:
       - name: s_link_id
         tests:
@@ -27,6 +30,7 @@ models:
 
   - name: fact_unsubscribe
     description: "Marts fact table related to unsubscribe events"
+    tags: ['marts']
     columns:
       - name: contact_id
         tests:
@@ -40,6 +44,7 @@ models:
 
   - name: fact_interactions
     description: "Marts fact table related to interaction events"
+    tags: ['marts']
     columns:
       - name: s_message_id
         tests:
