@@ -12,7 +12,8 @@ WITH deduplicate AS (
         unsub_not_relevant_03,
         unsub_not_interested_04,
         unsub_other_05,
-        campaign_id
+        campaign_id,
+        campaign_source
     FROM {{ ref('stg_marketing') }}
 
     {% if is_incremental() %}
@@ -35,7 +36,8 @@ sum_up AS (
             COALESCE(unsub_not_remember_signup_01, 0) + COALESCE(unsub_too_many_emails_02, 0) + COALESCE(unsub_not_relevant_03, 0) + COALESCE(unsub_not_interested_04, 0) + COALESCE(unsub_other_05, 0),
             0
         ) AS total_unsub_reason,
-        campaign_id
+        campaign_id,
+        campaign_source
     FROM deduplicate
 )
 
@@ -48,5 +50,6 @@ SELECT
     unsub_not_interested_04,
     unsub_other_05,
     total_unsub_reason,
-    campaign_id
+    campaign_id,
+    campaign_source
 FROM sum_up
